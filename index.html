@@ -3,9 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content= "width-device-width, initial-scale=1">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <!--title-->
     <title>Psychic Game</title>
 
 </head>
@@ -17,61 +14,120 @@
         <p>Guess what letters im thinking of.</p>
 
         <p id="directions-text">Press a letter from a-z and guess the right letter</p>
-        <p id="userchoice-text"></p>
-        <p id="computerchoice-text"></p>
+        <p id="userGuess-text"></p>
+        <!-- <p id="computerChoice-text"></p> -->
         <p id="wins-text"></p>
         <p id="losses-text"></p>
         <p id="guesses-text"></p>
-        <p id="total-text"></p>
+        <p id="lettersGuessed-text"></p>
     </div>
 
     <script type="text/javascript">
 
+    // VARIABLES
+    // ==========================================================================
         // all the choices in the game
-        var computerChoice = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",];
+        var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",];
+        var computerGuess = letters[Math.floor(Math.random() * letters.length)];
 
         // score board
         var wins = 0;
         var losses = 0;
         var guesses = 9;
-        var total = [];
+        var lettersGuessed = [];
+
+        resetGame();
 
         // Create varibles that hold reference to place in the HTML where we want to display things.
         var directionsText = document.getElementById("directions-text");
-        var userChoiceText = document.getElementById("userchoice-text");
-        var computerChoiceText = document.getElementById("computerchoice-text");
+        var userGuessText = document.getElementById("userGuess-text");
+        // var lettersText = document.getElementById("letters-text");
         var winsText = document.getElementById("wins-text");
         var lossesText = document.getElementById("losses-text");
         var guessesText = document.getElementById("guesses-text");
-        var totalText = document.getElementById("total-text");
+        var lettersGuessedText = document.getElementById("lettersGuessed-text");
 
-        // Function is run whenever the user presses a key.
+
+        // Function is run whenever the user presses a key. (good)
         document.onkeyup = function(event) {
 
-        // Determines which key was pressed.
-        var userGuess = event.key;
+        // Captures the key press, converts it to lowercase, and saves it to a variable.
+        var userGuess = event.key.toLowerCase();
+        
 
-        // Randomly chooses a choice from the options array. This is the Computer's guess.
-        var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];
 
-        // Only run the following code block if the user presses one of the keys
-        if ();{
-
+        //if player chooses right wins, reset game (good)
+        if (userGuess === computerGuess) {
+            wins++;
+            updateWins();
+            resetGame();
         }
+
+        // if player chooses wrong it losses 1 guess
+        else {
+            updateGuesses();
+        }
+
+        // if player chooses wrong and has no more lives game over, reset game (good)
+        if (guesses === 0) {
+            losses++;
+            updateLosses();
+            resetGame();
+        }
+
+        //if player guesses wrong add letter and losses 1 life (good)
+        lettersGuessed.push(userGuess)
+        guesses--
+        updateLettersGuessed();
+
+        console.log(userGuess)
+        console.log(losses)
+        console.log(computerGuess)
+        console.log(guesses)
+        console.log(lettersGuessed)
+    }
 
         // hides the directions after you press a key
         directionsText.textContent = "";
 
-        //displays the user and computer guesses, wins, losses,
-        userChoiceText.textContent = "you choice: " + userGuess;
-        computerChoiceText.textContent = "The computer chose: " + computerGuess;
+        //displays the user guess
+        // userGuessText.textContent = "you choice: " + userGuess;
+        
+        //displays what the computer choice
+        //lettersText.textContent = "The computer chose: " + computerGuess;
+
+
+
+        //display player wins, losses, guesses left, and letters guessed
+        function updateWins() {
+            winsText.innerHTML = "wins: " + wins;
+            console.log(wins)
+        }
+
+        function updateLosses() {
+            lossesText.innerHTML = "losses: " + losses;
+        }
+
+        function updateGuesses() {
+            guessesText.innerHTML = "guesses: " + guesses;
+        }
+
+        function updateLettersGuessed() {
+            lettersGuessedText.innerHTML = "letters guessed: " + lettersGuessed;
+        }
+
         winsText.textContent = "wins: " + wins;
         lossesText.textContent = "losses: " + losses;
         guessesText.textContent = "Guesses left: " + guesses;
-        totalText.textContent = "Your Guesses so far: " + total;
+        lettersGuessedText.textContent = "Your Guesses so far: " + lettersGuessed;
+        
+        //reset game function
+        function resetGame() {
+        guesses = 9;
+        lettersGuessed = [];
+        computerGuess = letters[Math.floor(Math.random() * letters.length)];
+        }
 
-
-    }
     </script>
 
 </body>
